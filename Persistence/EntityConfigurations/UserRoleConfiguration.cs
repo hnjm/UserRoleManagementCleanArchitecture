@@ -8,8 +8,8 @@ namespace Persistence.EntityConfigurations
     public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
-        {
-            builder.ToTable("UserRoles").HasKey(ur => new {ur.UserId,ur.RoleId});
+        {           
+            builder.ToTable("UserRoles").HasKey(ur => ur.Id);
         }
     }
 }

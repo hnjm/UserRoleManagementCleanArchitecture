@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class UserRole
+    public class UserRole : Entity<Guid>
     {
         public Guid RoleId { get; set; }
         public Guid UserId { get; set; }

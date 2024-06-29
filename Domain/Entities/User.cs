@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class User
+    public class User : Entity<Guid>
     {
-        public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
