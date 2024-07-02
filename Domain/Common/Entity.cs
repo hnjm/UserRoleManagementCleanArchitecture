@@ -1,8 +1,4 @@
-﻿
-
-using Domain.Common.Interfaces;
-
-namespace Domain.Entities
+﻿namespace Domain.Common
 {
     public class Entity<TId> : IEntityTimestamps
     {

@@ -1,6 +1,4 @@
-﻿
-
-namespace Domain.Common.Interfaces
+﻿namespace Domain.Common
 {
     public interface IEntityTimestamps
     {
