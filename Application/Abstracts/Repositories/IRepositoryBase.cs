@@ -13,11 +13,13 @@ namespace Application.Abstracts.Repositories
     {
         Task<TEntity?> GetAsync(
             Expression<Func<TEntity, bool>> predicate,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool enableTracking = true);
 
         Task<IList<TEntity>> GetListAsync(
             Expression<Func<TEntity, bool>>? predicate = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool enableTracking = true);
 
         Task<TEntity> AddAsync(TEntity entity);
         Task<ICollection<TEntity>> AddRangeAsync(ICollection<TEntity> entities);

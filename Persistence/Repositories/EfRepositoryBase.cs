@@ -7,50 +7,91 @@ using System.Linq.Expressions;
 
 namespace Persistence.Repositories
 {
-    
+
     public class EfRepositoryBase<TEntity, TEntityId, TContext> : IRepositoryBase<TEntity, TEntityId>
         where TEntity : Entity<TEntityId>
         where TContext : DbContext
-        
     {
-        public Task<TEntity> AddAsync(TEntity entity)
+        protected readonly TContext Context;
+
+        public EfRepositoryBase(TContext context)
         {
-            throw new NotImplementedException();
+            Context = context;
         }
 
-        public Task<ICollection<TEntity>> AddRangeAsync(ICollection<TEntity> entities)
+        public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+            bool enableTracking = true)
         {
-            throw new NotImplementedException();
+            IQueryable<TEntity> queryable = Context.Set<TEntity>();
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
+            if (include != null)
+                queryable = include(queryable);
+            return await queryable.FirstOrDefaultAsync(predicate);
         }
 
-        public Task<TEntity> DeleteAsync(TEntity entity)
+        public async Task<IList<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+             bool enableTracking = true)
         {
-            throw new NotImplementedException();
+            IQueryable<TEntity> queryable = Context.Set<TEntity>();
+            if (!enableTracking)
+                queryable = queryable.AsNoTracking();
+            if (include != null)
+                queryable = include(queryable);
+            if (predicate != null)
+                queryable = queryable.Where(predicate);
+            return await queryable.ToListAsync();
         }
 
-        public Task<ICollection<TEntity>> DeleteRangeAsync(ICollection<TEntity> entities)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            entity.CreatedDate = DateTime.UtcNow;
+            await Context.AddAsync(entity);
+            await Context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public async Task<ICollection<TEntity>> AddRangeAsync(ICollection<TEntity> entities)
         {
-            throw new NotImplementedException();
+            foreach (TEntity item in entities)
+                item.CreatedDate = DateTime.UtcNow;
+            await Context.AddRangeAsync(entities);
+            await Context.SaveChangesAsync();
+            return entities;
         }
 
-        public Task<IList<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            entity.UpdatedDate = DateTime.UtcNow;
+            Context.Update(entity);
+            await Context.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task<ICollection<TEntity>> UpdateRangeAsync(ICollection<TEntity> entities)
         {
-            throw new NotImplementedException();
+            foreach (TEntity item in entities)
+                item.UpdatedDate = DateTime.UtcNow;
+            Context.UpdateRange(entities);
+            await Context.SaveChangesAsync();
+            return entities;
         }
 
-        public Task<ICollection<TEntity>> UpdateRangeAsync(ICollection<TEntity> entities)
+        public async Task<TEntity> DeleteAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            entity.DeletedDate = DateTime.UtcNow;
+            Context.Remove(entity);
+            await Context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<ICollection<TEntity>> DeleteRangeAsync(ICollection<TEntity> entities)
+        {
+            foreach (TEntity item in entities)
+                item.DeletedDate = DateTime.UtcNow;
+            Context.RemoveRange(entities);
+            await Context.SaveChangesAsync();
+            return entities;
         }
     }
 }
