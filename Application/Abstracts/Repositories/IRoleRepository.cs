@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
+
 
 namespace Application.Abstracts.Repositories
 {
-    public interface IRoleRepository
+    public interface IRoleRepository : IRepositoryBase<Role,Guid>
     {
+
     }
 }
