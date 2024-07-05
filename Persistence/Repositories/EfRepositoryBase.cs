@@ -1,5 +1,4 @@
-﻿
-using Application.Abstracts.Repositories;
+﻿using Application.Abstracts.Repositories;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -7,7 +6,6 @@ using System.Linq.Expressions;
 
 namespace Persistence.Repositories
 {
-
     public class EfRepositoryBase<TEntity, TEntityId, TContext> : IRepositoryBase<TEntity, TEntityId>
         where TEntity : Entity<TEntityId>
         where TContext : DbContext
