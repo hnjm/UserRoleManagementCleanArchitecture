@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
-
 namespace Persistence.Context
 {
     public class BaseDbContext : DbContext

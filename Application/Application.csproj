@@ -9,9 +9,13 @@
   <ItemGroup>
     <Folder Include="Abstracts\Services\" />
     <Folder Include="Concretes\Services\" />
+    <Folder Include="Features\Users\Commands\Delete\" />
+    <Folder Include="Features\Users\Commands\Update\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
   </ItemGroup>
 

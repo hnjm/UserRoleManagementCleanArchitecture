@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Application.Abstracts.Services
 {
-    public interface IUserUserRoleService
+    public interface IUserRoleService
     {
         Task<UserRole?> GetAsync(
         Expression<Func<UserRole, bool>> predicate,

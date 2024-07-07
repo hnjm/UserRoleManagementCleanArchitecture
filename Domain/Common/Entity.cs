@@ -1,5 +1,6 @@
 ﻿namespace Domain.Common
 {
+    // Burayı daha sonra gözden geçiricem!!!
     public class Entity<TId> : IEntityTimestamps
     {
         public TId Id { get; set; }
