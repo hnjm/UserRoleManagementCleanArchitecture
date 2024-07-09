@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Common;
+﻿using Domain.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
-    public class Role : Entity<Guid>
-    {       
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
+    public class Role : IdentityRole<Guid>   //Entity<Guid>
+    {              
+        public string Description { get; set; }      
     }
 }

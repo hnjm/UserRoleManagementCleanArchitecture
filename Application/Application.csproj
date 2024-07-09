@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Abstracts\Services\" />
-    <Folder Include="Concretes\Services\" />
     <Folder Include="Features\Users\Commands\Delete\" />
     <Folder Include="Features\Users\Commands\Update\" />
   </ItemGroup>

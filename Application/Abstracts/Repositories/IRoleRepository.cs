@@ -1,10 +1,10 @@
-﻿using Domain.Entities;
+﻿//using Domain.Entities;
 
 
-namespace Application.Abstracts.Repositories
-{
-    public interface IRoleRepository : IRepositoryBase<Role,Guid>
-    {
+//namespace Application.Abstracts.Repositories
+//{
+//    public interface IRoleRepository : IRepositoryBase<Role,Guid>
+//    {
 
-    }
-}
+//    }
+//}

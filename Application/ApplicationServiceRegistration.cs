@@ -1,5 +1,5 @@
-﻿using Application.Abstracts.Services;
-using Application.Concretes.Services;
+﻿//using Application.Abstracts.Services;
+//using Application.Concretes.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -14,11 +14,7 @@ namespace Application
             services.AddMediatR(configuration =>
             {
                 configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            });
-
-            services.AddScoped<IUserService, UserManager>();
-            services.AddScoped<IRoleService, RoleManager>();
-            services.AddScoped<IUserRoleService, UserRoleManager>();
+            });           
 
             return services;
         }
