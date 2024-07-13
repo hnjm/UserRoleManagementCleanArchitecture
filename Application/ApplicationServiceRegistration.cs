@@ -1,6 +1,4 @@
-﻿//using Application.Abstracts.Services;
-//using Application.Concretes.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Application
@@ -14,7 +12,7 @@ namespace Application
             services.AddMediatR(configuration =>
             {
                 configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            });           
+            });     
 
             return services;
         }

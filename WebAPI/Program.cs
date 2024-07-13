@@ -13,6 +13,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
