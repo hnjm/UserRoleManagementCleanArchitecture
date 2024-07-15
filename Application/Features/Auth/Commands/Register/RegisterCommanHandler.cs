@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Exceptions.Types;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -20,8 +21,12 @@ namespace Application.Features.Auth.Commands.Register
 
         public async Task<Unit> Handle(RegisterCommandRequest request, CancellationToken cancellationToken)
         {
-            // User var mı? BusinessRules eklenmeli!
-            await _userManager.FindByEmailAsync(request.Email);
+            var existingUser = await _userManager.FindByEmailAsync(request.Email);
+            if (existingUser != null)
+            {
+                throw new BusinessException("Kullanıcı zaten mevcut.");
+            }
+            
 
             User user = _mapper.Map<User>(request);
             user.UserName = request.Email;
