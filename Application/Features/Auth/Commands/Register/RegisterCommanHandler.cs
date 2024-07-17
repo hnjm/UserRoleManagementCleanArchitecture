@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions.Types;
+using Application.Features.Auth.Rules;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -6,51 +7,46 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.Auth.Commands.Register
 {
-    public class RegisterCommanHandler : IRequestHandler<RegisterCommandRequest, Unit>
+    public class RegisterCommanHandler : IRequestHandler<RegisterCommandRequest, RegisterCommandResponse>
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
+        private readonly AuthBusinessRules _authBusinessRules;
         private readonly IMapper _mapper;
 
-        public RegisterCommanHandler(UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper)
+        public RegisterCommanHandler(UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, AuthBusinessRules authBusinessRules)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
+            _authBusinessRules = authBusinessRules;
         }
 
-        public async Task<Unit> Handle(RegisterCommandRequest request, CancellationToken cancellationToken)
+        public async Task<RegisterCommandResponse> Handle(RegisterCommandRequest request, CancellationToken cancellationToken)
         {
-            var existingUser = await _userManager.FindByEmailAsync(request.Email);
-            if (existingUser != null)
-            {
-                throw new BusinessException("Kullanıcı zaten mevcut.");
-            }
-            
+            await _authBusinessRules.UserEmailShouldBeNotExists(request.Email);
 
             User user = _mapper.Map<User>(request);
-            user.UserName = request.Email;
-            user.SecurityStamp = Guid.NewGuid().ToString();
 
-            IdentityResult result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
+            IdentityResult createdUser = await _userManager.CreateAsync(user, request.Password);
+
+            // Role var mı ? BusinessRules eklenmeli mi ?
+            if (!await _roleManager.RoleExistsAsync("user"))
             {
-                // Role var mı ? BusinesRules eklenmeli mi ?
-                if(!await _roleManager.RoleExistsAsync("user"))
+                await _roleManager.CreateAsync(new Role
                 {
-                    await _roleManager.CreateAsync(new Role
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "user",
-                        NormalizedName = "USER",
-                        Description = "Bu bir user rolüdür.",
-                        ConcurrencyStamp = Guid.NewGuid().ToString()
-                    });
-                    await _userManager.AddToRoleAsync(user, "user");
-                }
+                    Id = Guid.NewGuid(),
+                    Name = "user",
+                    NormalizedName = "USER",
+                    Description = "Bu bir user rolüdür.",
+                    ConcurrencyStamp = Guid.NewGuid().ToString()
+                });
+                await _userManager.AddToRoleAsync(user, "user");
             }
 
-            return Unit.Value;
+            RegisterCommandResponse response = _mapper.Map<RegisterCommandResponse>(user);
+            response.Message = "İşlem Başarılı.";
+            return response;          
         }
     }
 }

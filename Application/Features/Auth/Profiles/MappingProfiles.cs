@@ -9,10 +9,8 @@ namespace Application.Features.Auth.Profiles
         public MappingProfiles()
         {
             // RegisterCommandRequest'den User'a eşleme
-            CreateMap<RegisterCommandRequest, User>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email)); 
-                /*.ForMember(dest => dest.PasswordHash, opt => opt.Ignore()); */ // PasswordHash burada doldurulmamalı, UserManager kullanılmalı.             
+            CreateMap<RegisterCommandRequest, User>().ReverseMap();
+            CreateMap<RegisterCommandResponse, User>().ReverseMap();           
         }
     }
 }

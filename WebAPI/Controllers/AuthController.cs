@@ -18,9 +18,9 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterCommandRequest request)
-        {          
-            await _mediator.Send(request);
-            return StatusCode(StatusCodes.Status201Created);
+        {
+            RegisterCommandResponse response = await _mediator.Send(request);
+            return Created(uri: "", response);
         }
     }
 }
