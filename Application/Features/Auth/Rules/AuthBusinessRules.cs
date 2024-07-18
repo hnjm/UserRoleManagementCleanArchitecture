@@ -19,7 +19,21 @@ namespace Application.Features.Auth.Rules
         {
             var userEmail = await _userManager.FindByEmailAsync(email);
             if (userEmail != null)           
-                throw new BusinessException(AuthMessages.UserMailAlreadyExists);           
+                throw new BusinessException(AuthMessages.UserMailAlreadyExists);
+            
+        }
+        public Task EmailOrPasswordShouldNotBeInvalid(User? user, bool checkPassword)
+        {
+            if (user is null || !checkPassword)
+                throw new BusinessException(AuthMessages.InvalidEmailOrPassword);
+            return Task.CompletedTask;
+        }
+
+        public Task RefreshTokenShouldNotBeExpired(DateTime? expiryDate)
+        {
+            if (expiryDate <= DateTime.Now)
+                throw new BusinessException(AuthMessages.SessionExpired);
+            return Task.CompletedTask;           
         }
     }
 }
