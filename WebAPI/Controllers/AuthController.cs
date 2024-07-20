@@ -1,6 +1,8 @@
 ﻿using Application.Features.Auth.Commands.Login;
 using Application.Features.Auth.Commands.RefreshToken;
 using Application.Features.Auth.Commands.Register;
+using Application.Features.Auth.Commands.Revoke;
+using Application.Features.Auth.Commands.RevokeAll;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +21,7 @@ namespace WebAPI.Controllers
             _mediator = mediator;
         }
 
-        
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Register(RegisterCommandRequest request)
@@ -31,7 +33,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginCommandRequest request)
         {
-            LoginCommandResponse response =await _mediator.Send(request);
+            LoginCommandResponse response = await _mediator.Send(request);
             return Ok(response);
         }
 
@@ -40,6 +42,20 @@ namespace WebAPI.Controllers
         {
             RefreshTokenCommandResponse response = await _mediator.Send(request);
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Revoke(RevokeCommandRequest request)
+        {
+            var response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RevokeAll()
+        {
+            await _mediator.Send(new RevokeAllCommandRequest());
+            return Ok();
         }
     }
 }

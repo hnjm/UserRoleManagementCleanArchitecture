@@ -31,6 +31,7 @@ namespace Application.Features.Auth.Commands.Register
             IdentityResult createdUser = await _userManager.CreateAsync(user, request.Password);
 
             // Role var mı ? BusinessRules eklenmeli mi ?
+            // Burada gene role değil kullanıcı rolu kontrol edilmeli !!!!
             if (!await _roleManager.RoleExistsAsync("user"))
             {
                 await _roleManager.CreateAsync(new Role

@@ -35,5 +35,12 @@ namespace Application.Features.Auth.Rules
                 throw new BusinessException(AuthMessages.SessionExpired);
             return Task.CompletedTask;           
         }
+
+        public Task EmailAddressShouldBeValid(User? user)
+        {
+            if (user is null)
+                throw new BusinessException(AuthMessages.EmailNotFound);
+            return Task.CompletedTask;
+        }
     }
 }
